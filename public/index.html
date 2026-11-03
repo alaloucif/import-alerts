@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حاسبة التكلفة الكاملة للاستيراد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f8fa;--ink:#12161c;--mute:#667085;--line:#e3e6eb;--field:#eef0f4;--accent:#1d4ed8;--on:#fff;--warn:#b54708;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1217;--ink:#eceff4;--mute:#98a2b3;--line:#262b34;--field:#1a1f27;--accent:#7aa2ff;--on:#0b1020;--warn:#f79009}}
+:root[data-theme="dark"]{--bg:#0f1217;--ink:#eceff4;--mute:#98a2b3;--line:#262b34;--field:#1a1f27;--accent:#7aa2ff;--on:#0b1020;--warn:#f79009}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingAR+LT","IBM Plex Sans Arabic",system-ui,sans-serif;font-size:15px;line-height:1.7;background-color:var(--bg)}
+.wrap{max-width:1060px;margin:0 auto;padding:28px 20px 96px}
+h1{font-size:22px;font-weight:600;margin:0 0 2px}
+.sub{color:var(--mute);font-size:13px;margin:0 0 28px}
+.grid{display:grid;gap:40px}
+@media(min-width:900px){.grid{grid-template-columns:1fr 360px;align-items:start}.res{position:sticky;top:20px}.bar{display:none!important}}
+section{padding:18px 0;border-top:1px solid var(--line)}
+section:first-child{border-top:0;padding-top:0}
+h2{font-size:14px;font-weight:600;margin:0 0 12px;color:var(--mute)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.f{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.f span{font-weight:500}
+.f small{color:var(--mute);font-size:11.5px;line-height:1.5}
+.f.off{opacity:.4}
+input,select{font:inherit;font-size:15px;color:var(--ink);background:var(--field);border:1px solid transparent;border-radius:8px;padding:9px 11px;width:100%;min-width:0}
+input[type=number]{direction:ltr;text-align:right}
+input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.chk{flex-direction:row;align-items:flex-start;gap:10px;grid-column:1/-1}
+.chk input{width:18px;height:18px;margin-top:4px;accent-color:var(--accent)}
+details summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--mute);list-style:none}
+details summary::before{content:"+ ";}
+details[open] summary::before{content:"− "}
+details .row{margin-top:12px}
+.big{font-size:38px;font-weight:600;line-height:1.2;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.big small{font-size:15px;font-weight:400;color:var(--mute);margin-inline-start:6px}
+.lab{color:var(--mute);font-size:13px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:14px;border-top:1px solid var(--line)}
+.kv b{font-weight:500;font-variant-numeric:tabular-nums;direction:ltr}
+.stack{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:18px 0 12px;gap:2px}
+.stack i{display:block;background:var(--accent);min-width:2px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-inline-end:8px}
+.res h2{margin-top:22px}
+.note{font-size:12px;color:var(--mute);margin-top:22px;line-height:1.7}
+.sens .kv span:last-child{color:var(--mute)}
+.bar{position:fixed;inset:auto 0 0 0;background:var(--bg);border-top:1px solid var(--line);padding:10px 20px calc(10px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:baseline}
+.bar b{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin:0 0 24px}
+.tabs button{font:inherit;font-size:15px;background:none;border:0;border-bottom:2px solid transparent;color:var(--mute);padding:8px 2px;cursor:pointer}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.chip{font:inherit;font-size:13px;background:var(--field);color:var(--ink);border:0;border-radius:16px;padding:6px 14px;cursor:pointer}
+.chip.on{background:var(--accent);color:var(--on)}
+.al{padding:18px 0;border-top:1px solid var(--line)}
+.al h3{font-size:16px;font-weight:600;margin:6px 0 8px}
+.al .m{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--mute);align-items:center}
+.tag{background:var(--field);border-radius:10px;padding:1px 9px;color:var(--ink)}
+.al p{margin:4px 0;font-size:14px}
+.al .k{color:var(--mute)}
+.al a{color:var(--accent);font-size:13px;margin-inline-end:14px}
+.warn{color:var(--warn)}
+#feedWrap{max-width:760px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>حاسبة التكلفة الكاملة للاستيراد</h1>
+  <p class="sub">نموذج أولي. القيم الافتراضية تجريبية، فعدّلها بأرقامك الفعلية.</p>
+  <nav class="tabs"><button class="on" data-t="calc">الحاسبة</button><button data-t="alerts">التنبيهات</button></nav>
+  <div id="tabCalc"><div class="grid">
+    <div id="form"></div>
+    <aside class="res">
+      <div class="lab">التكلفة الكاملة (دون TVA القابلة للخصم)</div>
+      <div class="big"><span id="total">0</span><small>دج</small></div>
+      <div class="stack" id="stack"></div>
+      <div id="legend"></div>
+      <h2>ملخص</h2>
+      <div id="sum"></div>
+      <h2>حساسية النتيجة</h2>
+      <div class="sens" id="sens"></div>
+      <p class="note">تقدير إرشادي وليس تصريحاً جمركياً. تحقق من البند الجمركي والنسب الحالية (قانون المالية) ومن نسب التوطين البنكي لدى بنكك قبل أي قرار.</p>
+    </aside>
+  </div></div>
+  <div id="tabAlerts" hidden><div id="feedWrap">
+    <p class="sub" style="margin-bottom:16px">تنبيهات الاستيراد فقط. المرجع هو المواقع الرسمية، وكل تنبيه يحمل حالة التحقق.</p>
+    <div class="chips" id="chips"></div>
+    <p class="lab" id="chk"></p>
+    <div id="feed"></div>
+    <p class="note">معلومات إرشادية وليست استشارة قانونية. راجع النص الرسمي قبل أي قرار.</p>
+  </div></div>
+</div>
+<div class="bar"><span class="lab">التكلفة الكاملة</span><b><span id="total2">0</span> دج</b></div>
+<script>
+const $=id=>document.getElementById(id);
+const RATES={USD:134,EUR:155,CNY:18.6,TRY:3.3};
+const S=[
+{t:'البضاعة والصرف',f:[
+['price','قيمة الفاتورة','10000','n','بالعملة الأجنبية'],
+['cur','العملة','USD','s',[['USD','دولار'],['EUR','يورو'],['CNY','يوان'],['TRY','ليرة تركية']]],
+['rate','سعر الصرف (دج)','134','n','سعر بنك الجزائر يوم التصريح'],
+['qty','عدد الوحدات','500','n'],
+['inco','شرط البيع','FOB','s',[['EXW','EXW'],['FOB','FOB'],['CIF','CIF (الشحن والتأمين مشمولان)']]]]},
+{t:'الشحن والتأمين',f:[
+['origin','مصاريف داخلية في بلد المنشأ','0','n','للشرط EXW فقط'],
+['freight','الشحن الدولي','1800','n','بالعملة الأجنبية'],
+['insp','التأمين %','0.5','n','يُكتتب في الجزائر']]},
+{t:'الجمارك والضرائب',f:[
+['dd','الحق الجمركي %','15','n','حسب البند الجمركي'],
+['od','رسوم إضافية %','0','n','مثل DAPS وTIC ومساهمة التضامن إن وُجدت'],
+['vat','TVA','19','s',[['19','19%'],['9','9%']]],
+['vatded','TVA قابلة للخصم (إعادة بيع)','1','c','لا تدخل في التكلفة لكنها تدخل في السيولة المطلوبة']]},
+{t:'الميناء والتخليص (دج)',f:[
+['port','رسوم الميناء ومناولة الحاويات','90000','n'],
+['fwd','أتعاب المتحصل','60000','n'],
+['store','التخزين والتأخير','40000','n'],
+['coc','المعاينة وشهادة المطابقة','50000','n'],
+['inland','النقل إلى المخزن','45000','n']]},
+{t:'البنك والتمويل',d:1,f:[
+['dom','رسم التوطين %','0.5','n','تحقق من النسبة الحالية'],
+['com','عمولات بنكية أخرى %','0.3','n'],
+['prov','مؤونة مجمدة % من القيمة','120','n','تحقق من النسبة الحالية'],
+['rt','تكلفة رأس المال سنوياً %','8','n'],
+['days','مدة تجميد المؤونة (يوم)','60','n']]},
+{t:'التسعير',f:[['margin','هامش الربح المستهدف %','20','n','من سعر البيع']]}];
+const fld=a=>{const [id,l,v,t,h]=a;
+ if(t==='c')return `<label class="f chk"><input type="checkbox" id="${id}" checked><span>${l}<br><small>${h}</small></span></label>`;
+ const c=t==='s'?`<select id="${id}">${h.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`:`<input id="${id}" type="number" inputmode="decimal" step="any" min="0" value="${v}">`;
+ return `<label class="f" id="w_${id}"><span>${l}</span>${c}${t==='n'&&h?`<small>${h}</small>`:''}</label>`};
+$('form').innerHTML=S.map(s=>{const b=`<div class="row">${s.f.map(fld).join('')}</div>`;
+ return s.d?`<section><details><summary>${s.t}</summary>${b}</details></section>`:`<section><h2>${s.t}</h2>${b}</section>`}).join('');
+S.forEach(s=>s.f.forEach(a=>{if(a[3]==='s')$(a[0]).value=a[2]}));
+const v=id=>parseFloat($(id).value)||0;
+const fmt=n=>new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(Math.round(n));
+function calc(o={}){
+ const rate=v('rate')*(o.fx||1),price=v('price'),inco=$('inco').value;
+ let fr=v('freight')*(o.fr||1),org=v('origin'),ins=0;
+ if(inco==='CIF'){fr=0;org=0}else{if(inco==='FOB')org=0;ins=(price+org+fr)*v('insp')/100}
+ const goods=price*rate,ship=(org+fr+ins)*rate,cv=goods+ship;
+ const duty=cv*(v('dd')+v('od'))/100,vat=(cv+duty)*v('vat')/100;
+ const local=v('port')+v('fwd')+v('store')+v('coc')+v('inland');
+ const bank=goods*(v('dom')+v('com'))/100+goods*v('prov')/100*v('rt')/100*v('days')/365;
+ const ded=$('vatded').checked,vatc=ded?0:vat;
+ const total=goods+ship+duty+local+bank+vatc;
+ return{goods,ship,duty,local,bank,vat,vatc,ded,total,cash:total+(ded?vat:0)}}
+function render(){
+ const inco=$('inco').value;
+ [['origin',inco!=='EXW'],['freight',inco==='CIF'],['insp',inco==='CIF']].forEach(([i,off])=>{$('w_'+i).classList.toggle('off',off);$(i).disabled=off});
+ const r=calc(),q=Math.max(v('qty'),1),unit=r.total/q,m=v('margin');
+ $('total').textContent=$('total2').textContent=fmt(r.total);
+ const seg=[['البضاعة',r.goods],['الشحن والتأمين',r.ship],['الحقوق الجمركية',r.duty],['الميناء والتخليص',r.local],['البنك والتمويل',r.bank]];
+ if(!r.ded)seg.push(['TVA غير قابلة للخصم',r.vatc]);
+ const op=[1,.75,.55,.4,.26,.15];
+ $('stack').innerHTML=seg.map((s,i)=>`<i style="width:${s[1]/r.total*100}%;opacity:${op[i]}"></i>`).join('');
+ $('legend').innerHTML=seg.map((s,i)=>`<div class="kv"><span><span class="dot" style="opacity:${op[i]}"></span>${s[0]}</span><b>${fmt(s[1])} (${(s[1]/r.total*100||0).toFixed(1)}%)</b></div>`).join('');
+ const kv=(a,b)=>`<div class="kv"><span>${a}</span><b>${b}</b></div>`;
+ $('sum').innerHTML=kv('تكلفة الوحدة',fmt(unit)+' دج')+kv('الزيادة على ثمن الشراء',((r.total/r.goods-1)*100||0).toFixed(1)+'%')+kv('السيولة المطلوبة قبل استرجاع TVA',fmt(r.cash)+' دج')+kv('أدنى سعر بيع للوحدة (دون TVA)',m<100?fmt(unit/(1-m/100))+' دج':'—');
+ const sc=[['سعر الصرف +5%',{fx:1.05}],['سعر الصرف −5%',{fx:.95}],['الشحن +20%',{fr:1.2}]];
+ $('sens').innerHTML=sc.map(([l,o])=>{const t=calc(o).total,d=(t/r.total-1)*100;return `<div class="kv"><span>${l}</span><span><b>${fmt(t)}</b> &nbsp;${d>=0?'+':''}${d.toFixed(1)}%</span></div>`}).join('');
+}
+$('cur').addEventListener('change',()=>{$('rate').value=RATES[$('cur').value]});
+document.addEventListener('input',render);document.addEventListener('change',render);
+const CATS={ppi:'برنامج الاستيراد (PPI)',micro:'الاستيراد المصغّر',bank:'التوطين البنكي',customs:'الجمارك والرسوم',conf:'المطابقة والمنع'};
+const TYPES={rule:'قاعدة',deadline:'موعد نهائي',open:'فتح منصة',scope:'توسيع النطاق'};
+const MC='https://www.mcepe.gov.dz',IM='https://import.mcepe.gov.dz',T='https://www.tsa-algerie.com/';
+let ALERTS=[
+{id:'ppi-2025-07',date:'2025-07-09',cat:'ppi',type:'rule',title:'إقرار برنامج الاستيراد التقديري (PPI)',what:'أقرّته وزارة التجارة الخارجية وترقية الصادرات بأثر رجعي من 1 جويلية 2025، وهو مطلوب لعمليات التوطين البنكي والتخليص الجمركي.',do:'تأكد أن بضاعتك مدرجة في برنامج مصادَق عليه قبل فتح التوطين.',impact:'لا يغيّر نسب الرسوم، لكنه يحدد توقيت الاستيراد وإمكانية إتمامه.',official:MC,lead:T+'?p=284980'},
+{id:'ppi-2025-12',date:'2025-12-16',cat:'ppi',type:'rule',title:'تجديد PPI لسنة 2026 وإطلاق منصة رقمية للمتابعة',what:'أعلنت الوزارة تجديد الإلزام لسنة 2026 وإطلاق منصة رقمية لإدارة البرامج ومتابعتها.',do:'سجّل برنامجك على المنصة لكل سداسي.',impact:'لا أثر مباشر على التكلفة.',official:IM,lead:T+'importations-lalgerie-reconduit-le-ppi-pour-2026-avec-une-nouveaute/'},
+{id:'ppi-2026-02a',date:'2026-02-17',due:'2026-02-26',cat:'ppi',type:'deadline',title:'آخر أجل لإيداع PPI للسداسي الأول 2026',what:'للاستيراد لحساب المؤسسة (تجهيزات و/أو مواد أولية): آخر أجل 26 فيفري 2026 عبر المنصة الرقمية.',do:'راقب مواعيد السداسي القادم حتى لا يفوتك الأجل.',impact:'فوات الأجل قد يعطّل التوطين والتخليص.',official:IM,lead:'https://news.radioalgerie.dz/fr/node/80007'},
+{id:'ppi-2026-02b',date:'2026-02-23',cat:'ppi',type:'scope',title:'المؤسسات المصغّرة (NESDA) مطالبة بالتسجيل في المنصة',what:'دعت NESDA المؤسسات المصغّرة الراغبة في الاستيراد إلى التسجيل في منصة الوزارة وإيداع برنامجها.',do:'إن كنت مستفيداً من NESDA فسجّل قبل أي عملية.',impact:'',official:IM,lead:T+'importations-lalgerie-elargit-le-ppi-a-dautres-operateurs/'},
+{id:'ppi-2026-03',date:'2026-03-22',cat:'ppi',type:'open',title:'فتح المنصة لمستوردي السلع للبيع بحالتها (نشاط رقم 4)',what:'أعلنت الوزارة فتح التسجيل أمام العاملين في الاستيراد لإعادة البيع على الحال.',do:'قدّم برنامجك عبر المنصة وفق الإجراءات المعلنة.',impact:'',official:IM,lead:'https://news.radioalgerie.dz/fr/node/82021'},
+{id:'ppi-2026-06',date:'2026-06-23',cat:'ppi',type:'open',title:'إعادة فتح المنصة لبرامج السداسي الثاني 2026',what:'أعادت الوزارة فتح المنصة لإيداع برامج الاستيراد للسداسي الثاني، مع فيديو يشرح مراحل الإيداع.',do:'أودع برنامجك للسداسي الثاني.',impact:'',official:IM,lead:'https://algerie-eco.com/2026/06/23/importations-reouverture-de-la-plateforme-de-depot-des-programmes-previsionnels-pour-le-second-semestre-2026/'},
+{id:'micro-2025-06',date:'2025-06-28',cat:'micro',type:'rule',title:'المرسوم التنفيذي 25-170: شروط الاستيراد المصغّر',what:'يقتصر على المقاول الذاتي الجزائري المقيم بترخيص عام من وزارة التجارة الخارجية، وتمويله من حساب بالعملة الصعبة لدى البنك الخارجي الجزائري.',do:'استوفِ شروط البطاقة والترخيص والحساب قبل أول عملية.',impact:'رسم جمركي مخفض 5% ونظام جبائي خاص حسب مصادر صحفية؛ تحقق منها قبل تطبيقها في الحاسبة.',official:MC,lead:T+'commerce-du-cabas-lalgerie-fixe-les-conditions/'}
+];
+let cat='all';
+function drawAlerts(){
+ const today=new Date(),fd=d=>new Date(d).toLocaleDateString('ar-DZ-u-nu-latn',{day:'numeric',month:'long',year:'numeric'});
+ $('chips').innerHTML=[['all','الكل'],...Object.entries(CATS)].map(([k,l])=>`<button class="chip${k===cat?' on':''}" data-c="${k}">${l}</button>`).join('');
+ const L=ALERTS.filter(a=>cat==='all'||a.cat===cat).sort((a,b)=>b.date.localeCompare(a.date));
+ $('feed').innerHTML=L.length?L.map(a=>{const dd=a.due?Math.ceil((new Date(a.due)-today)/864e5):null;
+  return `<article class="al"><div class="m"><span>${fd(a.date)}</span><span class="tag">${TYPES[a.type]||''}</span><span class="tag">${CATS[a.cat]||''}</span>${dd===null?'':dd>=0?`<span class="warn">باقٍ ${dd} يوماً</span>`:'<span>انتهى الأجل</span>'}</div><h3>${a.title}</h3><p><span class="k">ما الذي تغيّر؟ </span>${a.what}</p><p><span class="k">ماذا تفعل؟ </span>${a.do}</p>${a.impact?`<p><span class="k">الأثر على التكلفة: </span>${a.impact}</p>`:''}<div class="m" style="margin-top:8px"><a href="${a.official}" target="_blank" rel="noopener">الموقع الرسمي</a><a href="${a.lead}" target="_blank" rel="noopener">الخبر المرجعي</a><span>${a.verified?'تم التحقق من النص الرسمي':'قيد التحقق من النص الرسمي'}</span></div></article>`}).join(''):'<p class="lab">لا توجد تنبيهات مسجلة في هذه الفئة بعد.</p>';
+}
+function tab(t){$('tabCalc').hidden=t!=='calc';$('tabAlerts').hidden=t!=='alerts';document.querySelector('.bar').hidden=t!=='calc';document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='alerts')drawAlerts()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)tab(b.dataset.t);const c=e.target.closest('[data-c]');if(c){cat=c.dataset.c;drawAlerts()}});
+fetch('alerts.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(Array.isArray(d)&&d.length){ALERTS=d;drawAlerts()}}).catch(()=>{});
+fetch('status.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(s=>{if(s&&s.last_run)$('chk').textContent='آخر فحص آلي: '+s.last_run.replace('T',' ').slice(0,16)+' (UTC)'}).catch(()=>{});
+render();
+</script>
+</body>
+</html>

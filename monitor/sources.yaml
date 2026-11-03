@@ -1,0 +1,18 @@
+# Only mcepe.gov.dz and import.mcepe.gov.dz appeared in my research.
+# The other addresses are likely but UNVERIFIED: open each in a browser first.
+sources:
+  - name: Ministère du Commerce extérieur (site officiel)
+    url: https://www.mcepe.gov.dz
+    enabled: true
+  - name: Plateforme import (PPI)
+    url: https://import.mcepe.gov.dz
+    enabled: false   # likely a JS app: needs Playwright, or monitor by hand
+  - name: Douanes algériennes
+    url: https://www.douane.gov.dz
+    enabled: false
+  - name: Banque d'Algérie
+    url: https://www.bank-of-algeria.dz
+    enabled: false
+  - name: Journal Officiel
+    url: https://www.joradp.dz
+    enabled: false
